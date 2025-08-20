@@ -4,14 +4,16 @@ services:
   - type: web
     name: live-ai-voice-chat
     env: python
-    plan: free # Note: The 'free' plan may sleep, which can disconnect WebSockets. A paid plan is recommended for production.
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --bind 0.0.0.0:$PORT --log-level info app:app"
+    plan: free # A paid plan is recommended for production to prevent WebSockets from sleeping.
+    
+    # === THE FIX IS HERE ===
+    # This ensures Render uses a stable Python version compatible with all dependencies.
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11 # Specify a stable Python version
+        value: 3.11.9
       - key: ELEVENLABS_API_KEY
-        # IMPORTANT: Set the value for this key in the Render dashboard
-        # under Environment > Add Environment Variable.
-        # DO NOT paste your key here.
+        # IMPORTANT: Set the value for this key in the Render dashboard.
         sync: false
+
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "gunicorn --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --bind 0.0.0.0:$PORT --log-level info app:app"
