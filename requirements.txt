@@ -1,0 +1,14 @@
+# requirements.txt
+
+# --- Core Web Framework and WebSocket integration
+Flask==2.3.3
+Flask-Sockets==0.2.1
+
+# --- High-performance asynchronous networking and WSGI server
+gevent==24.2.1
+gevent-websocket==0.10.1
+gunicorn==21.2.0
+
+# --- Libraries for API communication
+requests==2.31.0
+websocket-client==1.7.0
